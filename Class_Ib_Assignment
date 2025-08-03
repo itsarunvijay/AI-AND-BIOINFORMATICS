@@ -1,0 +1,35 @@
+
+# Load necessary library
+library(readr)
+
+# Create output folders if they don't already exist
+dir.create("clean_data", showWarnings = FALSE)
+dir.create("results", showWarnings = FALSE)
+
+# Load data from your specified path
+patient_info <- read_csv("DATA/patient_info.csv")
+
+# Inspect structure and summary
+str(patient_info)
+summary(patient_info)
+
+# Convert 'age' to numeric if it's not already
+if (!is.numeric(patient_info$age)) {
+  patient_info$age <- as.numeric(patient_info$age)
+}
+
+# Convert 'gender' to factor
+patient_info$gender <- as.factor(patient_info$gender)
+
+# Convert 'smoker' to binary: 1 = "Yes", 0 = "No"
+patient_info$smoking_binary <- ifelse(tolower(patient_info$smoker) == "yes", 1, 0)
+patient_info$smoking_binary <- as.factor(patient_info$smoking_binary)
+
+# Save cleaned dataset to clean_data folder
+write.csv(patient_info, "clean_data/patient_info_clean.csv", row.names = FALSE)
+
+# Save full workspace to results folder
+save.image(file = "results/full_workspace.RData")
+
+load("results/ARUN_Class_Ib_Assignment.RData")
+
